@@ -87,15 +87,14 @@ $ipt -A INPUT -m pkttype --pkt-type broadcast -j DROP
 
 # Docker interface 
 $ipt -A FORWARD -o docker0 -j DOCKER
-# Allow DOcker tracffic
-#$ipt -A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 $ipt -A FORWARD -i docker0 ! -o docker0 -j ACCEPT
 $ipt -A FORWARD -i docker0 -o docker0 -j ACCEPT
+# Allow Docker tracffic
+#$ipt -A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
 # Accept inbound ICMP messages
 $ipt -A INPUT -p ICMP --icmp-type 8 -s 0.0.0.0/0 -j ACCEPT
 $ipt -A INPUT -p ICMP --icmp-type 11 -s 0.0.0.0/0 -j ACCEPT
-
 
 ########################
 echo "Setup iptables" from docker ports
@@ -111,4 +110,3 @@ done
 
 
 iptables-save
-
